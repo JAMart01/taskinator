@@ -4,7 +4,7 @@ var pageContentEl = document.querySelector("#page-content");
 var taskIdCounter = 0;
 var formEl =document.querySelector("#task-form");
 var tasksToDoEl = document.querySelector("#tasks-to-do");
-
+var tasks = [];
 
 
 // function to that allows user to fill out form to create new tasks or edit old tasks
@@ -35,7 +35,8 @@ var taskFormHandler = function(event) {
     else {
         var taskDataObj = {
             name: taskNameInput,
-            type: taskTypeInput
+            type: taskTypeInput,
+            status: "to do"
         };
 
         createTaskEl(taskDataObj);
@@ -45,6 +46,10 @@ var taskFormHandler = function(event) {
 
 // function to create and append the list element to the DOM 
 var createTaskEl = function (taskDataObj) {
+
+    console.log(taskDataObj);
+    console.log(taskDataObj.status);
+
 
     // create list item
     var listItemEl = document.createElement("li");
@@ -63,6 +68,9 @@ var createTaskEl = function (taskDataObj) {
 
     //add the task info to the list item
     listItemEl.appendChild(taskInfoEl);
+
+    taskDataObj.id = taskIdCounter;
+    tasks.push(taskDataObj);
 
     var taskActionEl = createTaskActions(taskIdCounter);
     listItemEl.appendChild(taskActionEl);
@@ -175,6 +183,14 @@ var completeEditTask = function(taskName, taskType, taskId) {
     //set new values
     taskSelected.querySelector("h3.task-name").textContent = taskName;
     taskSelected.querySelector("span.task-type").textContent = taskType;
+
+    //loop through tasks and task object with new content
+    for (var i = 0; i < tasks.length; i++ ) {
+        if (tasks[i].id === parseInt(taskId)) {
+            tasks[i].name = taskName;
+            tasks[i].type = taskType;
+        }
+    };
 
     alert("Task Updated!");
 
